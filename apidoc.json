@@ -1,0 +1,6 @@
+{
+  "name": "API Doc.",
+  "version": "0.1.0",
+  "description": "server-less push notification system AWS SNS, Lambda, API Gateway",
+  "title": "server-less push notification"
+}

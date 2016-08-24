@@ -37,12 +37,29 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    :param event:
-    event contains following key
-        - payload : which contains
-            - topic_name
-    :param context:
-    :return:
+    @api {DELETE} https://bk3om565e4.execute-api.us-east-1.amazonaws.com/prod/ delete_topic
+    @apiName delete_topic
+    @apiGroup Topic
+    @apiDescription delete topic
+    @apiVersion 0.1.0
+    @apiHeader {String} x-api-key api-key.
+    @apiParam {String} topic_name       Mandatory
+    @apiParamExample {json} Example:
+    {
+        "payload":
+        {
+            "topic_name": "topic_name"
+        }
+    }
+    @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+              code='200', message='success',
+              data={
+                      topic_arn {String}
+              },
+              metadata={}
+        }
     """
     try:
         logger.info(event)
@@ -103,5 +120,5 @@ def __delete_topic_from_db(topic_arn):
 
 
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
-    response = json.dumps(dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time()))
+    response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response

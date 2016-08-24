@@ -37,13 +37,31 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    :param event:
-    event contains following key
-        - payload : which contains
-            - user_id
-            - topic_name
-    :param context:
-    :return:
+    @api {POST} https://v141i5fp0j.execute-api.us-east-1.amazonaws.com/prod/ subscribe_topic
+    @apiName subscribe_topic
+    @apiGroup Subscription
+    @apiDescription subscribe to topic
+    @apiVersion 0.1.0
+    @apiHeader {String} x-api-key api-key.
+    @apiParam {String} topic_name       Mandatory
+    @apiParam {String} user_id          Mandatory
+    @apiParamExample {json} Example:
+    {
+        "payload":
+        {
+            "topic_name": "topic_name",
+            "user_id": "1"
+        }
+    }
+    @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+              code='200', message='success',
+              data={
+                      subscription_arn {String}
+              },
+              metadata={}
+        }
     """
     try:
         logger.info(event)
@@ -135,5 +153,5 @@ def __save_subscription(user_id, topic_name, subscription_arn):
 
 
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
-    response = json.dumps(dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time()))
+    response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response

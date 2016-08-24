@@ -37,12 +37,28 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    :param event:
-    event contains following key
-        - payload : which contains
-            -
-    :param context:
-    :return:
+    @api {GET} https://bk3om565e4.execute-api.us-east-1.amazonaws.com/prod/ get_topics
+    @apiName get_topics
+    @apiGroup Topic
+    @apiDescription get topics
+    @apiVersion 0.1.0
+    @apiHeader {String} x-api-key api-key.
+    @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+              code='200', message='success',
+              data=[
+                    {
+                      "name": "News",
+                      "arn": "arn:aws:sns:us-east-1:481790367918:News"
+                    },
+                    {
+                      "name": "Test",
+                      "arn": "arn:aws:sns:us-east-1:481790367918:Test"
+                    }
+                  ],
+              metadata={}
+        }
     """
     try:
         logger.info(event)
@@ -76,5 +92,5 @@ def __get_topics():
 
 
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
-    response = json.dumps(dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time()))
+    response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response

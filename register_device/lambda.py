@@ -37,15 +37,34 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    :param event:
-    event contains following key
-        - payload : which contains
-            - app
-            - user_id
-            - device_token
-            _ user_data
-    :param context:
-    :return:
+    @api {POST} https://4r3r9b19u9.execute-api.us-east-1.amazonaws.com/prod register_device
+    @apiName register_device
+    @apiGroup Device
+    @apiDescription register new device
+    @apiVersion 0.1.0
+    @apiHeader {String} x-api-key api-key.
+    @apiParam {String} user_id            Mandatory
+    @apiParam {String} device_token       Mandatory
+    @apiParam {String} app                Mandatory
+    @apiParam {Object} user_data          Optional
+    @apiParamExample {json} Example:
+    {
+        "payload":
+        {
+            "device_token": "a6181119 3c02a69f c689f523 1a86da85 39e7b77c d0504d2a 20fd0c48 8ab8fae8",
+            "app": "appname-ios-dev",
+            "user_id": "1",
+            "user_data": {"gender": "Male"}
+        }
+    }
+    @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+              code='200', message='success',
+              data={
+              },
+              metadata={}
+        }
     """
     try:
         logger.info(event)
@@ -118,5 +137,5 @@ def __create_app_endpoint(app, device_token, user_id):
 
 
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
-    response = json.dumps(dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time()))
+    response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response

@@ -108,5 +108,5 @@ def publish_message_to_topic(arn, message):
 
 
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
-    response = json.dumps(dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time()))
+    response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response
