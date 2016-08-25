@@ -5,6 +5,7 @@ import psycopg2
 import boto3
 import json
 import time
+import allTimezones
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -44,6 +45,7 @@ def handler(event, context):
     @apiVersion 0.1.0
     @apiHeader {String} x-api-key api-key.
     @apiParam {String} user_id            Mandatory
+    @apiParam {String} user_timezone      Optional if not UTC
     @apiParam {String} device_token       Mandatory
     @apiParam {String} app                Mandatory
     @apiParam {Object} user_data          Optional
@@ -71,8 +73,9 @@ def handler(event, context):
         payload = event.get('payload')
         __is_valid(payload['device_token'], payload['user_id'])
         end_point_arn = __create_app_endpoint(payload['app'], payload['device_token'], payload['user_id'])
+        user_timezone = allTimezones.validate_timezone(payload['user_timezone'])
         __save_user_endpoint(payload['app'], payload['device_token'], end_point_arn, payload['user_id'],
-                             payload['user_data'])
+                             payload['user_data'], user_timezone)
         logger.info('success')
         return get_raw_response_message(code=200, message='success', data={})
     except Exception as e:
@@ -80,18 +83,19 @@ def handler(event, context):
         return get_raw_response_message(code=406, message=e.message, data={})
 
 
-def __save_user_endpoint(app, device_token, end_point_arn, user_id, user_data):
+def __save_user_endpoint(app, device_token, end_point_arn, user_id, user_data, user_timezone):
     insert_query = """
         INSERT INTO {table_name}(
-                user_id, app, arn, token, user_data)
-        VALUES ('{user_id}', '{app}', '{end_point_arn}', '{device_token}', '{user_data}');
+                user_id, app, arn, token, user_data, user_timezone)
+        VALUES ('{user_id}', '{app}', '{end_point_arn}', '{device_token}', '{user_data}', '{user_timezone}');
     """.format(**{
         'table_name': Config['DATABASE']['tables']['users_endpoints'],
         'app': app,
         'device_token': device_token,
         'user_id': user_id,
         'end_point_arn': end_point_arn,
-        'user_data': json.dumps(user_data)
+        'user_data': json.dumps(user_data),
+        'user_timezone':user_timezone
     })
     with db_conn.cursor() as cur:
         cur.execute(insert_query)
