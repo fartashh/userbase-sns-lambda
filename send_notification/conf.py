@@ -14,7 +14,6 @@ def load_config(env_alias):
         response = s3.get_object(Bucket=bucket, Key=key)
         config = json.loads(response['Body'].read())
         return config[env_alias]
-
     except Exception as e:
         print(e)
         print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))

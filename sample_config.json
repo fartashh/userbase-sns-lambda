@@ -1,0 +1,31 @@
+{
+  "$LATEST": {
+    "APPLICATIONS": {
+      "appname-ios-dev": "arn:aws:sns:us-east-1:xxxxxxxxxx:app/APNS_SANDBOX/ios-dev"
+    },
+    "NOTIFICATION_ENDPOINTS": {
+      "ios-dev": "APNS_SANDBOX",
+      "ios-stg": "APNS",
+      "ios": "APNS"
+    },
+    "DATABASE": {
+      "host": "dev-sns-lambda.xxxxxxxxxx.us-east-1.rds.amazonaws.com",
+      "port": 5432,
+      "db": "xxxxxxxxxx",
+      "tables": {
+        "users_endpoints": "users_endpoints",
+        "topics": "topics",
+        "subscriptions":"subscriptions",
+        "notifications":"notifications"
+      },
+      "user": "xxxxxxxxxx",
+      "password": "xxxxxxxxxxxxxxxxxx"
+    }
+  },
+  "DEV": {
+  },
+  "TEST": {
+  },
+  "PROD": {
+  }
+}

@@ -6,6 +6,7 @@ import boto3
 import json
 import time
 from datetime import datetime
+import pytz
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -48,6 +49,7 @@ def handler(event, context):
     @apiParam {Object}       query              Optional (based on user_data)
     @apiParam {String}       message            Mandatory
     @apiParam {Boolean}      is_json            Optional (default : false)
+    @apiParam {Boolean}      send_in_user_timezone            Optional (default : false)
     @apiParam {Datetime}     fire_at            Optional ('%Y-%m-%d %H:%M:%S') if not provide notification send instantly
 
     @apiParamExample {json} Example:
@@ -80,9 +82,10 @@ def handler(event, context):
         user_id = payload.get('user_id', None)
         message = payload['message']
         is_json = payload.get('is_json', False)
+        send_in_user_timezone = payload.get('send_in_user_timezone', False)
         fire_at = payload.get('fire_at', None)
         if fire_at:
-            fire_at = datetime.strptime(fire_at, '%Y-%m-%d %H:%M:%S')
+            fire_at = pytz.utc.localize(datetime.strptime(fire_at, '%Y-%m-%d %H:%M:%S'))
         query = payload.get('query', None)
         topics_names = payload.get('topics_names', None)
 
@@ -117,6 +120,8 @@ def handler(event, context):
         else:
             for device in devices_by_id:
                 message = prepare_message(message, is_json)
+                if send_in_user_timezone:
+                    fire_at = localize_timezone(fire_at, device['user_timezone'])
                 schedule_notification(device['arn'], message, fire_at, False)
 
             for topic in topics:
@@ -133,7 +138,7 @@ def handler(event, context):
 def get_user_arns_by_id(user_id):
     devices = []
     select_query = """
-          SELECT arn FROM {table_name}
+          SELECT arn, user_timezone FROM {table_name}
           WHERE user_id = '{user_id}'
           """.format(**{
         'table_name': Config['DATABASE']['tables']['users_endpoints'],
@@ -154,7 +159,7 @@ def get_user_arns_by_id(user_id):
 def get_user_arns_by_query(query):
     devices = []
     select_query = """
-          SELECT arn FROM {table_name}
+          SELECT arn, user_timezone FROM {table_name}
           WHERE user_data = '{user_data}'
           """.format(**{
         'table_name': Config['DATABASE']['tables']['users_endpoints'],
@@ -242,3 +247,8 @@ def prepare_message(message, is_json):
 def get_raw_response_message(code=200, message='', data={}, metadata={}, status_code=200):
     response = dict(code=code, message=message, data=data, metadata=metadata, timestamp=time.time())
     return response
+
+def localize_timezone(fire_at, user_timezone):
+    local_tz = pytz.timezone(user_timezone)
+    local_dt = fire_at.replace(tzinfo = local_tz)
+    return local_dt.astimezone (pytz.utc)
