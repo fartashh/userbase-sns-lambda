@@ -37,7 +37,7 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    @api {DELETE} https://bk3om565e4.execute-api.us-east-1.amazonaws.com/prod/ delete_topic
+    @api {DELETE} /topic delete_topic
     @apiName delete_topic
     @apiGroup Topic
     @apiDescription delete topic

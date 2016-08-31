@@ -37,7 +37,7 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    @api {POST} https://v141i5fp0j.execute-api.us-east-1.amazonaws.com/prod/ subscribe_topic
+    @api {POST} /subscribe subscribe_topic
     @apiName subscribe_topic
     @apiGroup Subscription
     @apiDescription subscribe to topic

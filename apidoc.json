@@ -2,5 +2,6 @@
   "name": "API Doc.",
   "version": "0.1.0",
   "description": "server-less push notification system AWS SNS, Lambda, API Gateway",
-  "title": "server-less push notification"
+  "title": "server-less push notification",
+   "url":"https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/prod"
 }

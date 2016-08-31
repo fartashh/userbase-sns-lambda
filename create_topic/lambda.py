@@ -37,7 +37,7 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    @api {POST} https://bk3om565e4.execute-api.us-east-1.amazonaws.com/prod/ create_topic
+    @api {POST} /topic create_topic
     @apiName create_topic
     @apiGroup Topic
     @apiDescription create new topic

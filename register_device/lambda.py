@@ -38,7 +38,7 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    @api {POST} https://4r3r9b19u9.execute-api.us-east-1.amazonaws.com/prod register_device
+    @api {POST} /device register_device
     @apiName register_device
     @apiGroup Device
     @apiDescription register new device

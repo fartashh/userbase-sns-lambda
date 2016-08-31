@@ -38,7 +38,7 @@ logger.info("SUCCESS: Connection to DATABASE and SNS instance succeeded")
 
 def handler(event, context):
     """
-    @api {POST} https://92yq44217c.execute-api.us-east-1.amazonaws.com/prod/ send_notification
+    @api {POST} /notification send_notification
     @apiName send_notification
     @apiGroup Notification
     @apiDescription send or schedule notification to user or topic
